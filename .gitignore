@@ -1,6 +1,7 @@
 # C compiled objects
 *.o
 *.obj
+fdf
 
 # Executables
 *.exe

@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:51:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/21 22:21:25 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/21 22:25:47 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int main(int ac, char **av)
 
     (void)ac;
     (void)av;
+    (void)mlx_win;
 	mlx = mlx_init();
 	if (!mlx)
 		return (0);
