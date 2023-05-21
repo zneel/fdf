@@ -1,0 +1,42 @@
+# C compiled objects
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+
+# Libraries
+*.a
+*.lib
+
+# C preprocessor output
+*.i
+*.s
+
+# Visual Studio Code specific files and folders
+.vscode/
+.settings/
+
+# Compiled files
+out/
+
+# macOS specific files
+.DS_Store
+
+# Linux core files
+core
+
+# Compiled Object files for Windows
+*.suo
+*.pdb
+*.ilk
+*.aps
+*.exp
+*.res
+*.sbr
+
+# Compiled Dynamic libraries for Windows
+*.dll
+*.so
+*.dylib
