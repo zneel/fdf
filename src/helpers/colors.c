@@ -1,37 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handlers.c                                         :+:      :+:    :+:   */
+/*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 22:05:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/24 19:11:40 by ebouvier         ###   ########.fr       */
+/*   Created: 2023/05/23 12:09:39 by ebouvier          #+#    #+#             */
+/*   Updated: 2023/05/23 14:15:37 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-int	key_handler(int k, t_fdf *fdf)
+int	rgb_encode(uint8_t r, uint8_t g, uint8_t b)
 {
-	if (k == XK_Escape || k == XK_q)
-	{
-		mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-		fdf->win_ptr = NULL;
-	}
-	return (0);
-}
-
-int	close_handler(t_fdf *fdf)
-{
-	mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-	fdf->win_ptr = NULL;
-	return (0);
-}
-
-int	render(t_fdf *fdf)
-{
-	if (fdf && fdf->win_ptr && fdf->mlx_ptr)
-		draw_matrix(fdf);
-	return (0);
+	return (r << 16 | g << 8 | b);
 }

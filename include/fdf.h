@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:52:57 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/22 22:19:50 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/25 00:57:54 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,74 @@
 
 # include "../libft/includes/libft.h"
 # include "../mlx_linux/mlx.h"
+# include <X11/X.h>
 # include <X11/keysym.h>
+# include <fcntl.h>
 # include <math.h>
+# include <stdint.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 
 # define W_WIDTH 1280
 # define W_HEIGHT 720
 
-typedef struct s_mlx
+typedef struct s_vect3
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-}			t_mlx;
+	float		x;
+	float		y;
+	float		z;
+}				t_vect3;
 
-int			default_handler(void *mlx);
-int			key_handler(int k, t_mlx *mlx);
-void		hook_loop(t_mlx *mlx);
+typedef struct s_vect2
+{
+	float		x;
+	float		y;
+}				t_vect2;
+
+typedef struct s_matrix
+{
+	int			*matrix;
+	int			size_x;
+	int			size_y;
+}				t_matrix;
+
+typedef struct s_img
+{
+	void		*image;
+	char		*data;
+	int			bpp;
+	int			line_len;
+	int			endian;
+}				t_img;
+
+typedef struct s_fdf
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_matrix	*mat;
+	t_img		*img;
+}				t_fdf;
+
+typedef struct s_bren
+{
+	int			x0;
+	int			y0;
+	int			x1;
+	int			y1;
+	float		slope;
+}				t_bren;
+
+t_matrix		*open_map(char *file);
+
+int				key_handler(int k, t_fdf *fdf);
+int				close_handler(t_fdf *fdf);
+
+int				render(t_fdf *fdf);
+void			hook_loop(t_fdf *fdf);
+
+int				rgb_encode(uint8_t r, uint8_t g, uint8_t b);
+int				get_value_row_major_order(t_matrix *matrix, int x, int y);
+
+void			draw_matrix(t_fdf *fdf);
 
 #endif

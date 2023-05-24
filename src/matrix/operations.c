@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handlers.c                                         :+:      :+:    :+:   */
+/*   operations.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 22:05:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/24 19:11:40 by ebouvier         ###   ########.fr       */
+/*   Created: 2023/05/24 12:38:29 by ebouvier          #+#    #+#             */
+/*   Updated: 2023/05/24 17:18:19 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-int	key_handler(int k, t_fdf *fdf)
+/**
+ * @brief Get the value row major order object
+ * m[x][y] = base addr + sizeofint ((x - 0) * matrix.size_y + (y - 0)) 
+ * @param mat 
+ * @param x 
+ * @param y 
+ * @return int 
+ */
+int	get_value_row_major_order(t_matrix *mat, int x, int y)
 {
-	if (k == XK_Escape || k == XK_q)
-	{
-		mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-		fdf->win_ptr = NULL;
-	}
-	return (0);
-}
-
-int	close_handler(t_fdf *fdf)
-{
-	mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-	fdf->win_ptr = NULL;
-	return (0);
-}
-
-int	render(t_fdf *fdf)
-{
-	if (fdf && fdf->win_ptr && fdf->mlx_ptr)
-		draw_matrix(fdf);
+	if ((x >= 0 && x < mat->size_x) && (y >= 0 && y < mat->size_y))
+		return (mat->matrix[x * mat->size_y + y]);
 	return (0);
 }
