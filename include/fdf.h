@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:52:57 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/25 00:57:54 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:06:38 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,20 @@
 
 typedef struct s_vect3
 {
-	float		x;
-	float		y;
-	float		z;
+	int			x;
+	int			y;
+	int			z;
 }				t_vect3;
-
-typedef struct s_vect2
-{
-	float		x;
-	float		y;
-}				t_vect2;
 
 typedef struct s_matrix
 {
 	int			*matrix;
-	int			size_x;
-	int			size_y;
+	int			width;
+	int			height;
+	int			zoom;
+	double		angle;
+	int			tx;
+	int			ty;
 }				t_matrix;
 
 typedef struct s_img
@@ -65,11 +63,12 @@ typedef struct s_fdf
 
 typedef struct s_bren
 {
-	int			x0;
-	int			y0;
-	int			x1;
-	int			y1;
-	float		slope;
+	int			dx;
+	int			dy;
+	int			err;
+	int			e2;
+	int			sx;
+	int			sy;
 }				t_bren;
 
 t_matrix		*open_map(char *file);

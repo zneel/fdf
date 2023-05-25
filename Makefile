@@ -1,7 +1,7 @@
 NAME := fdf
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -g3 -I./include
+CFLAGS := -Wall -Wextra -Werror -O3 -I./include
 MLX_PATH := ./mlx_linux
 
 SRCS := src/main.c \

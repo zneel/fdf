@@ -6,43 +6,128 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:31 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/25 01:36:10 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:37:22 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 #include <stdio.h>
 
-t_vect2	isometric_projection(t_matrix *mat, int x, int y)
+double	deg_to_rad(double deg)
 {
-	t_vect3	vect3;
-	t_vect2	vect2;
-
-	vect3.x = x;
-	vect3.y = y;
-	vect3.z = get_value_row_major_order(mat, vect3.x, vect3.y);
-	vect2.x = sqrt(2) / 2 * (vect3.x - vect3.y);
-	vect2.y = (sqrt(2 / 3) * vect3.z) - (1 / sqrt(6)) * (vect3.x + vect3.y);
-	return (vect2);
+	return (deg * (M_PI / 180.0));
 }
 
-void	bresenham(t_fdf *fdf, t_vect2 from, t_vect2 to)
+void	isometric(int *x, int *y, int z, double theta)
 {
-	int	m_new;
-	int	slope_error_new;
+	int	tmp_x;
+	int	tmp_y;
 
-	m_new = 2 * (to.y - from.y);
-	slope_error_new = m_new - (to.x - from.x);
-	for (int x = from.x, y = from.y; x <= to.x; x++)
+	tmp_x = *x;
+	tmp_y = *y;
+	*x = -(tmp_x - tmp_y) * cos(deg_to_rad(theta));
+	*y = (tmp_x + tmp_y) * sin(deg_to_rad(theta)) - z;
+}
+
+t_vect3	*projection(t_fdf *fdf, t_vect3 *v3)
+{
+	v3->x *= fdf->mat->zoom;
+	v3->y *= fdf->mat->zoom;
+	v3->z *= fdf->mat->zoom;
+	isometric(&v3->x, &v3->y, v3->z, fdf->mat->angle);
+	v3->x += fdf->mat->tx;
+	v3->y += fdf->mat->ty;
+	return (v3);
+}
+
+int	sign(int a, int b)
+{
+	if (a < b)
+		return (1);
+	return (-1);
+}
+
+void	init_bresenham(t_bren *b, t_vect3 *start, t_vect3 *end)
+{
+	b->dx = abs(end->x - start->x);
+	b->sx = sign(start->x, end->x);
+	b->dy = abs(end->y - start->y);
+	b->sy = sign(start->y, end->y);
+	if (b->dx > b->dy)
+		b->err = b->dx / 2;
+	else
+		b->err = -b->dy / 2;
+}
+
+int	get_color(int z)
+{
+	if (z < 0)
+		return (0x00b7ff);
+	else if (z > 0)
+		return (0xcc0000);
+	else
+		return (0xffffff);
+}
+
+void	draw_line(t_fdf *fdf, t_vect3 *start, t_vect3 *end)
+{
+	t_bren	b;
+
+	init_bresenham(&b, start, end);
+	while (start->x != end->x || start->y != end->y)
 	{
-		mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, x, y, rgb_encode(255, 255,
-					255));
-		slope_error_new += m_new;
-		if (slope_error_new >= 0)
+		mlx_pixel_put(fdf->mlx_ptr,
+						fdf->win_ptr,
+						start->x,
+						start->y,
+						get_color(start->z));
+		b.e2 = b.err;
+		if (b.e2 > -b.dx)
 		{
-			y++;
-			slope_error_new -= 2 * (to.x - from.x);
+			b.err -= b.dy;
+			start->x += b.sx;
 		}
+		if (b.e2 < b.dy)
+		{
+			b.err += b.dx;
+			start->y += b.sy;
+		}
+	}
+}
+
+t_vect3	*get_vect3(t_matrix *mat, int x, int y)
+{
+	t_vect3	*v3;
+
+	v3 = malloc(sizeof(t_vect3));
+	if (!v3)
+		return (NULL);
+	v3->x = x;
+	v3->y = y;
+	v3->z = get_value_row_major_order(mat, x, y);
+	return (v3);
+}
+
+void	trace(t_fdf *fdf, int x, int y)
+{
+	t_vect3	*start;
+	t_vect3	*end;
+
+	if (x < fdf->mat->width - 1)
+	{
+		start = projection(fdf, get_vect3(fdf->mat, x, y));
+		end = projection(fdf, get_vect3(fdf->mat, x + 1, y));
+		draw_line(fdf, start, end);
+		free(start);
+		free(end);
+	}
+	if (y < fdf->mat->height - 1)
+	{
+		start = projection(fdf, get_vect3(fdf->mat, x, y));
+		end = projection(fdf, get_vect3(fdf->mat, x, y + 1));
+		draw_line(fdf, start, end);
+		free(start);
+		free(end);
 	}
 }
 
@@ -51,28 +136,19 @@ void	draw_matrix(t_fdf *fdf)
 	int	x;
 	int	y;
 
-	x = 0;
-	while (x < fdf->mat->size_x)
+	y = 0;
+	fdf->mat->zoom = 20;
+	fdf->mat->angle = 26.0;
+	fdf->mat->tx = (W_WIDTH / 2) - fdf->mat->width;
+	fdf->mat->ty = (W_HEIGHT / 2) - fdf->mat->height;
+	while (y < fdf->mat->height)
 	{
-		y = 0;
-		while (y < fdf->mat->size_y)
+		x = 0;
+		while (x < fdf->mat->width)
 		{
-			if (x == fdf->mat->size_x - 1 && y + 1 < fdf->mat->size_y)
-				bresenham(fdf, proj[x][y], proj[x][y + 1], offset_x, offset_y,
-						scale);
-			else if (y == fdf->mat->size_y - 1 && x != fdf->mat->size_x - 1)
-				bresenham(fdf, proj[x][y], proj[x + 1][y], offset_x, offset_y,
-						scale);
-			else if (x < fdf->mat->size_x - 1 && y != fdf->mat->size_y)
-			{
-				bresenham(fdf, proj[x][y], proj[x][y + 1], offset_x, offset_y,
-						scale);
-				bresenham(fdf, proj[x][y], proj[x + 1][y], offset_x, offset_y,
-						scale);
-			}
-			y++;
+			trace(fdf, x, y);
+			x++;
 		}
-		x++;
+		y++;
 	}
-	free_projection(fdf);
 }

@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 14:21:30 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/24 12:37:45 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:47:21 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	init_matrix_size(t_matrix *mat, char *file)
 	char	**split;
 	int		i;
 
-	mat->size_x = 0;
-	mat->size_y = 0;
+	mat->width = 0;
+	mat->height = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return ;
@@ -31,11 +31,11 @@ void	init_matrix_size(t_matrix *mat, char *file)
 		if (!split)
 			return (free(line));
 		i = 0;
-		mat->size_x++;
+		mat->width++;
 		while (split[i])
 		{
-			if (mat->size_x < 2 && ft_strncmp(split[i], "\n", 1) != 0)
-				mat->size_y++;
+			if (mat->width < 2 && ft_strncmp(split[i], "\n", 1) != 0)
+				mat->height++;
 			free(split[i]);
 			i++;
 		}
@@ -59,9 +59,9 @@ t_matrix	*open_map(char *file)
 		return (NULL);
 	mat->matrix = NULL;
 	init_matrix_size(mat, file);
-    ft_printf("matx%d\n", mat->size_x);
-    ft_printf("maty%d\n", mat->size_y);
-    mat->matrix = malloc(sizeof(int) * (mat->size_x * mat->size_y));
+    ft_printf("matx%d\n", mat->width);
+    ft_printf("maty%d\n", mat->height);
+    mat->matrix = malloc(sizeof(int) * (mat->width * mat->height));
 	if (!mat->matrix)
 		return (free(mat), NULL);
 	fd = open(file, O_RDONLY);
