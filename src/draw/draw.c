@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:31 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/25 23:37:22 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:08:48 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void	isometric(int *x, int *y, int z, double theta)
 
 	tmp_x = *x;
 	tmp_y = *y;
-	*x = -(tmp_x - tmp_y) * cos(deg_to_rad(theta));
-	*y = (tmp_x + tmp_y) * sin(deg_to_rad(theta)) - z;
+	*x = (tmp_x - tmp_y) * cos(theta);
+	*y = (tmp_x + tmp_y) * sin(theta) - z;
 }
 
 t_vect3	*projection(t_fdf *fdf, t_vect3 *v3)
 {
 	v3->x *= fdf->mat->zoom;
-	v3->y *= fdf->mat->zoom;
+	v3->y *= -fdf->mat->zoom;
 	v3->z *= fdf->mat->zoom;
 	isometric(&v3->x, &v3->y, v3->z, fdf->mat->angle);
 	v3->x += fdf->mat->tx;
@@ -137,8 +137,8 @@ void	draw_matrix(t_fdf *fdf)
 	int	y;
 
 	y = 0;
-	fdf->mat->zoom = 20;
-	fdf->mat->angle = 26.0;
+	fdf->mat->zoom = 10;
+	fdf->mat->angle = M_PI / 6;
 	fdf->mat->tx = (W_WIDTH / 2) - fdf->mat->width;
 	fdf->mat->ty = (W_HEIGHT / 2) - fdf->mat->height;
 	while (y < fdf->mat->height)
