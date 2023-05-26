@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:52:57 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/25 23:06:38 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/26 22:33:53 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_matrix
 typedef struct s_img
 {
 	void		*image;
-	char		*data;
+	char		*addr;
 	int			bpp;
 	int			line_len;
 	int			endian;
@@ -81,7 +81,11 @@ void			hook_loop(t_fdf *fdf);
 
 int				rgb_encode(uint8_t r, uint8_t g, uint8_t b);
 int				get_value_row_major_order(t_matrix *matrix, int x, int y);
-
+int				get_maximum_value(t_matrix *mat);
 void			draw_matrix(t_fdf *fdf);
+void			*get_image(t_fdf *fdf);
+void			put_pixel(t_img *data, int x, int y, int color);
+void			draw_image(t_fdf *fdf);
+void			*init_image(t_fdf *fdf);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:51:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/24 19:06:55 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/26 22:37:36 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,24 @@
 
 void	exit_fdf(t_fdf *fdf)
 {
+	free(fdf->img);
 	free(fdf->mat->matrix);
 	free(fdf->mat);
 	free(fdf->mlx_ptr);
 }
 
+void init_struct(t_fdf *fdf)
+{
+	fdf->img = init_image(fdf);
+	fdf->mat->zoom = 1;
+	fdf->mat->angle = M_PI / 6;
+	fdf->mat->tx = (W_WIDTH / 2);
+	fdf->mat->ty = (W_HEIGHT / 2);
+}
+
 int	main(int ac, char **av)
 {
-	t_fdf		fdf;
+	t_fdf	fdf;
 
 	if (ac != 2)
 		return (ft_printf("Error: missing map name\n"), 1);
@@ -34,8 +44,9 @@ int	main(int ac, char **av)
 	fdf.win_ptr = mlx_new_window(fdf.mlx_ptr, W_WIDTH, W_HEIGHT, "fdf");
 	if (!fdf.win_ptr)
 		return (mlx_destroy_display(fdf.mlx_ptr), free(fdf.mlx_ptr), 1);
-	draw_matrix(&fdf);
+	init_struct(&fdf);
 	hook_loop(&fdf);
+	mlx_destroy_image(fdf.mlx_ptr, fdf.img->image);
 	mlx_destroy_display(fdf.mlx_ptr);
 	exit_fdf(&fdf);
 	return (0);

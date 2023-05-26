@@ -1,7 +1,7 @@
 NAME := fdf
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -O3 -I./include
+CFLAGS := -Wall -Wextra -Werror -g3 -I./include
 MLX_PATH := ./mlx_linux
 
 SRCS := src/main.c \
@@ -10,7 +10,8 @@ SRCS := src/main.c \
         src/helpers/colors.c \
 		src/parser/map.c \
 		src/matrix/operations.c \
-		src/draw/draw.c
+		src/draw/draw.c \
+		src/draw/image.c
 
 OBJS := $(SRCS:.c=.o)
 LIBFT_PATH := ./libft

@@ -6,17 +6,12 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:31 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/26 02:08:48 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/26 22:32:48 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 #include <stdio.h>
-
-double	deg_to_rad(double deg)
-{
-	return (deg * (M_PI / 180.0));
-}
 
 void	isometric(int *x, int *y, int z, double theta)
 {
@@ -76,11 +71,7 @@ void	draw_line(t_fdf *fdf, t_vect3 *start, t_vect3 *end)
 	init_bresenham(&b, start, end);
 	while (start->x != end->x || start->y != end->y)
 	{
-		mlx_pixel_put(fdf->mlx_ptr,
-						fdf->win_ptr,
-						start->x,
-						start->y,
-						get_color(start->z));
+		put_pixel(fdf->img->image, start->x, start->y, get_color(start->z));
 		b.e2 = b.err;
 		if (b.e2 > -b.dx)
 		{
@@ -137,10 +128,6 @@ void	draw_matrix(t_fdf *fdf)
 	int	y;
 
 	y = 0;
-	fdf->mat->zoom = 10;
-	fdf->mat->angle = M_PI / 6;
-	fdf->mat->tx = (W_WIDTH / 2) - fdf->mat->width;
-	fdf->mat->ty = (W_HEIGHT / 2) - fdf->mat->height;
 	while (y < fdf->mat->height)
 	{
 		x = 0;
