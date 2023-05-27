@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:55:31 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/26 22:57:34 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:08:38 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	draw_line(t_fdf *fdf, t_vect3 *start, t_vect3 *end)
 	init_bresenham(&b, start, end);
 	while (start->x != end->x || start->y != end->y)
 	{
-		put_pixel(fdf->img->image, start->x, start->y, get_color(start->z));
+		put_pixel(fdf->img, start->x, start->y, get_color(start->z));
 		b.e2 = b.err;
 		if (b.e2 > -b.dx)
 		{

@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:51:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/26 22:58:42 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:12:31 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	exit_fdf(t_fdf *fdf)
 void init_struct(t_fdf *fdf)
 {
 	fdf->img = init_image(fdf);
-	float zoomX = W_WIDTH / (float)fdf->mat->width;
-	float zoomY = W_HEIGHT / (float)fdf->mat->height;
-	fdf->mat->zoom = fmin(zoomX, zoomY);
+	fdf->mat->zoom = 10;
 	fdf->mat->angle = M_PI / 6;
-	fdf->mat->tx = (W_WIDTH / 2);
-	fdf->mat->ty = (W_HEIGHT / 2);
+	fdf->mat->tx = (W_WIDTH / 2) - fdf->mat->width;
+	fdf->mat->ty = (W_HEIGHT / 2) - fdf->mat->height;
 }
 
 int	main(int ac, char **av)
