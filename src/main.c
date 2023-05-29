@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:51:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/29 09:49:41 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:22:30 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,21 @@ void	exit_fdf(t_fdf *fdf)
 	free(fdf->mlx_ptr);
 }
 
+void	init_zoom(int x, int y, int *zoom_x, int *zoom_y)
+{
+	if (!x)
+		x = 1;
+	if (!y)
+		y = 1;
+	*zoom_x = (MIN_WIDTH / (1.75 * x));
+	*zoom_y = (MIN_HEIGHT / (1.75 * y));
+	if (!*zoom_x || !*zoom_y)
+	{
+		*zoom_x = 1;
+		*zoom_y = 1;
+	}
+}
+
 void	init_struct(t_fdf *fdf)
 {
 	int	x;
@@ -45,13 +60,7 @@ void	init_struct(t_fdf *fdf)
 	fdf->mat->max_z = get_max(fdf->mat);
 	isometric(&x, &y, fdf->mat->max_z, fdf->mat->angle);
 	fdf->img = init_image(fdf);
-	zoom_x = (MIN_WIDTH / (1.75 * x));
-	zoom_y = (MIN_HEIGHT / (1.75 * y));
-	if (!zoom_x || !zoom_y)
-	{
-		zoom_x = 1;
-		zoom_y = 1;
-	}
+	init_zoom(x, y, &zoom_x, &zoom_y);
 	mini = min(abs(zoom_x), abs(zoom_y));
 	fdf->mat->zoom = mini;
 	fdf->mat->tx = (MIN_WIDTH - (x * fdf->mat->zoom)) / 2;
