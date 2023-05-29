@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 09:11:19 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/29 11:24:01 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 11:31:27 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,18 @@ int	get_matrix_dimensions(t_matrix *mat, char *file)
 	int		ok;
 	int		has_err;
 	char	*line;
-	int		lines_read;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (0);
 	line = get_next_line(fd);
 	has_err = 0;
-	lines_read = 0;
 	while (line && *line)
 	{
 		ok = split_count(mat, line, fd);
 		if (!ok)
 			has_err = 1;
 		line = get_next_line(fd);
-		lines_read++;
 	}
 	close(fd);
 	if (has_err)
