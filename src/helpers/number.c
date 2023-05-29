@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop.c                                             :+:      :+:    :+:   */
+/*   number.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 22:05:55 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/29 08:58:58 by ebouvier         ###   ########.fr       */
+/*   Created: 2023/05/27 17:17:07 by ebouvier          #+#    #+#             */
+/*   Updated: 2023/05/27 18:07:06 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/fdf.h"
-
-void	hook_loop(t_fdf *fdf)
+int	max(int a, int b)
 {
-	mlx_hook(fdf->win_ptr, KeyPress, KeyPressMask, key_handler, fdf);
-	mlx_hook(fdf->win_ptr, ClientMessage, NoEventMask, close_handler, fdf);
-	mlx_loop_hook(fdf->mlx_ptr, render, fdf);
-	mlx_loop(fdf->mlx_ptr);
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+int	min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
+int	sign(int a, int b)
+{
+	if (a < b)
+		return (1);
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 22:05:01 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/26 22:57:11 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/27 13:22:33 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@ int	close_handler(t_fdf *fdf)
 int	render(t_fdf *fdf)
 {
 	if (fdf && fdf->win_ptr && fdf->mlx_ptr)
-	{
-		draw_matrix(fdf);
 		draw_image(fdf);
-	}
 	return (0);
 }

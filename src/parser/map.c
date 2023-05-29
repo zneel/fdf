@@ -6,85 +6,80 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 14:21:30 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/25 22:47:21 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 10:39:23 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-void	init_matrix_size(t_matrix *mat, char *file)
+int	populate_matrix(t_matrix *mat, char *file)
 {
 	int		fd;
+	int		ok;
 	char	*line;
-	char	**split;
-	int		i;
+	int		row;
 
-	mat->width = 0;
-	mat->height = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		return ;
+		return (0);
 	line = get_next_line(fd);
+	row = 0;
+	ok = 0;
 	while (line && *line)
 	{
-		split = ft_split(line, ' ');
-		if (!split)
-			return (free(line));
-		i = 0;
-		mat->width++;
-		while (split[i])
-		{
-			if (mat->width < 2 && ft_strncmp(split[i], "\n", 1) != 0)
-				mat->height++;
-			free(split[i]);
-			i++;
-		}
-		free(split);
-		free(line);
+		ok = split_atoi(line, mat, fd, row);
+		if (!ok)
+			break ;
 		line = get_next_line(fd);
+		row++;
 	}
+	close(fd);
+	free(line);
+	if (!ok)
+		return (0);
+ 	return (1);
+}
+
+int	alloc_matrix(t_matrix *mat)
+{
+	int	row;
+	int	i;
+
+	mat->matrix = malloc(sizeof(int *) * mat->height);
+	if (!mat->matrix)
+		return (0);
+	row = 0;
+	while (row < mat->height)
+	{
+		mat->matrix[row] = malloc(sizeof(int) * mat->width);
+		if (!mat->matrix[row])
+		{
+			i = 0;
+			while (i < row)
+			{
+				free(mat->matrix[i]);
+				i++;
+			}
+			free(mat->matrix);
+			return (0);
+		}
+		row++;
+	}
+	return (1);
 }
 
 t_matrix	*open_map(char *file)
 {
-	int			fd;
-	char		*line;
 	t_matrix	*mat;
-	char		**split;
-	int			i;
-	int			j;
 
-	mat = malloc(sizeof(t_matrix));
+	mat = create_matrix();
 	if (!mat)
 		return (NULL);
-	mat->matrix = NULL;
-	init_matrix_size(mat, file);
-    ft_printf("matx%d\n", mat->width);
-    ft_printf("maty%d\n", mat->height);
-    mat->matrix = malloc(sizeof(int) * (mat->width * mat->height));
-	if (!mat->matrix)
-		return (free(mat), NULL);
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		return (free(mat), NULL);
-	line = get_next_line(fd);
-    j = 0;
-	while (line && *line)
-	{
-		split = ft_split(line, ' ');
-		if (!split)
-			return (free(line), free(mat->matrix), free(mat), NULL);
-        i = 0;
-		while (split[i])
-		{
-			if (ft_strncmp(split[i], "\n", 1) != 0)
-				mat->matrix[j++] = ft_atoi(split[i]);
-			free(split[i]);
-			i++;
-		}
-		free(split);
-		free(line);
-		line = get_next_line(fd);
-	}
+	if (!get_matrix_dimensions(mat, file))
+		return (free_matrix(mat), NULL);
+	if (!alloc_matrix(mat))
+		return (free_matrix(mat), NULL);
+	if (!populate_matrix(mat, file))
+		return (free_matrix(mat), NULL);
 	return (mat);
 }

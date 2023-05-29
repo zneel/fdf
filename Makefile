@@ -8,17 +8,22 @@ SRCS := src/main.c \
         src/events/handlers.c \
         src/events/loop.c \
         src/helpers/colors.c \
+        src/helpers/number.c \
+        src/helpers/vect3.c \
 		src/parser/map.c \
+		src/parser/matrix.c \
+		src/parser/matrix2.c \
 		src/matrix/operations.c \
 		src/draw/draw.c \
-		src/draw/image.c
+		src/draw/image.c \
+		src/draw/bresenham.c \
+		src/draw/projection.c
 
 OBJS := $(SRCS:.c=.o)
 LIBFT_PATH := ./libft
 LIBFT_FLAGS := -L$(LIBFT_PATH) -lft
 MLX_FLAGS := -L$(MLX_PATH) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 
-# Header file dependencies for each source file
 DEPS := include/fdf.h
 
 all: $(NAME)

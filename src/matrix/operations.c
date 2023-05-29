@@ -6,40 +6,56 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 12:38:29 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/26 22:24:50 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 08:59:15 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-/**
- * @brief Get the value row major order object
- * m[x][y] = base addr + sizeofint ((x - 0) * matrix.height + (y - 0)) 
- * @param mat 
- * @param x 
- * @param y 
- * @return int 
- */
-int	get_value_row_major_order(t_matrix *mat, int x, int y)
+int	get_max(t_matrix *mat)
 {
-	if ((x >= 0 && x < mat->width) && (y >= 0 && y < mat->height))
-		return (mat->matrix[x * mat->height + y]);
-	return (0);
-}
+	int	max_value;
+	int	current_value;
+	int	i;
+	int	j;
 
-int	get_maximum_value(t_matrix *mat)
-{
-	int	max_value = INT_MIN;
-	int	i, j;
-
-	for (i = 0; i < mat->width; i++)
+	i = 0;
+	max_value = INT_MIN;
+	while (i < mat->height)
 	{
-		for (j = 0; j < mat->height; j++)
+		j = 0;
+		while (j < mat->width)
 		{
-			int current_value = get_value_row_major_order(mat, i, j);
+			current_value = mat->matrix[i][j];
 			if (current_value > max_value)
 				max_value = current_value;
+			j++;
 		}
+		i++;
 	}
 	return (max_value);
+}
+
+int	get_min(t_matrix *mat)
+{
+	int	min_val;
+	int	current_value;
+	int	i;
+	int	j;
+
+	min_val = INT_MAX;
+	i = 0;
+	while (i < mat->height)
+	{
+		j = 0;
+		while (j < mat->width)
+		{
+			current_value = mat->matrix[i][j];
+			if (current_value < min_val)
+				min_val = current_value;
+			j++;
+		}
+		i++;
+	}
+	return (min_val);
 }

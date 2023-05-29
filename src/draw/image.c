@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:24 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/27 11:11:31 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 09:00:05 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,30 @@ void	put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*pixel;
 
-	if (x >= 0 && x < W_WIDTH && y >= 0 && y < W_HEIGHT)
+	if (x >= 0 && x < img->width && y >= 0 && y < img->height)
 	{
 		pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-		if (pixel >= img->addr && pixel + sizeof(color) <= img->addr + (W_HEIGHT
-				* img->line_len + W_WIDTH * (img->bpp / 8)))
+		if (pixel >= img->addr && pixel + sizeof(color) <= img->addr
+			+ (img->height * img->line_len + img->width * (img->bpp / 8)))
 		{
 			*(int *)pixel = color;
 		}
 	}
 }
 
-void	*init_image(t_fdf *fdf)
+t_img	*init_image(t_fdf *fdf)
 {
-	fdf->img = malloc(sizeof(t_img));
-	if (!fdf->img)
+	t_img	*img;
+
+	img = malloc(sizeof(t_img));
+	if (!img)
 		return (NULL);
-	fdf->img->bpp = 0;
-	fdf->img->line_len = 0;
-	fdf->img->endian = 0;
-	fdf->img->image = mlx_new_image(fdf->mlx_ptr, W_WIDTH, W_HEIGHT);
-	fdf->img->addr = mlx_get_data_addr(fdf->img->image, &fdf->img->bpp,
-			&fdf->img->line_len, &fdf->img->endian);
-	return (fdf->img);
+	img->width = MIN_WIDTH;
+	img->height = MIN_HEIGHT;
+	img->image = mlx_new_image(fdf->mlx_ptr, img->width, img->height);
+	img->addr = mlx_get_data_addr(img->image, &img->bpp, &img->line_len,
+			&img->endian);
+	return (img);
 }
 
 void	draw_image(t_fdf *fdf)
