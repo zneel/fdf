@@ -6,7 +6,7 @@
 /*   By: ebouvier <ebouvier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 14:21:30 by ebouvier          #+#    #+#             */
-/*   Updated: 2023/05/29 10:39:23 by ebouvier         ###   ########.fr       */
+/*   Updated: 2023/05/29 11:27:16 by ebouvier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	populate_matrix(t_matrix *mat, char *file)
 	free(line);
 	if (!ok)
 		return (0);
- 	return (1);
+	return (1);
 }
 
 int	alloc_matrix(t_matrix *mat)
